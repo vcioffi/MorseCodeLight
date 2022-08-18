@@ -5,19 +5,18 @@ import android.hardware.camera2.CameraManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.cioffi.soslight.helpers.CharToMorse
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-
+import kotlinx.coroutines.*
 
 
 class EncodeActivity : AppCompatActivity() {
     var flashLightStatus: Boolean = false
     var strToEncode = ""
+    var job: Job? = null
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +32,17 @@ class EncodeActivity : AppCompatActivity() {
             text = strToEncode
         }
 
+        val stopEncode: Button = findViewById(R.id.stopEncod)
+
+        stopEncode.setOnClickListener {
+            job?.cancel()
+        }
+
+
         window.decorView.post {
-            startMorsCode(this.strToEncode)
+            job = GlobalScope.launch(Dispatchers.Main){
+                startMorsCode(strToEncode)
+            }
         }
     }
 
