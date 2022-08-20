@@ -1,56 +1,75 @@
-package com.cioffi.soslight
+package com.cioffi.morsecodelight
 
 import android.content.Intent
 import android.hardware.camera2.CameraManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
-import android.widget.TextView
+import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.cioffi.soslight.helpers.CharToMorse
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
+import com.cioffi.morsecodelight.databinding.ActivityMainBinding
+import com.cioffi.morsecodelight.helpers.CharToMorse
+
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.*
 
 
-class EncodeActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
     var flashLightStatus: Boolean = false
-    var strToEncode = ""
+    var stopNow : Boolean = false
     var job: Job? = null
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_encode)
+        val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
+        val cameraId = cameraManager.cameraIdList[0]
 
-        val intentStr = intent.getStringExtra("stringToEncode")
-        if (intentStr != null) {
-            strToEncode = intentStr
-        }
-        // Capture the layout's TextView and set the string as its text
-        val textView = findViewById<TextView>(R.id.encodeMors).apply {
-            text = strToEncode
-        }
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val navView: BottomNavigationView = binding.navView
+
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+            )
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        navView.setupWithNavController(navController)
+
+
+        val generateEncode: Button = findViewById(R.id.morsBtn)
+        var textToEncode = findViewById(R.id.editTectToEncode) as EditText
 
         val stopEncode: Button = findViewById(R.id.stopEncod)
 
         stopEncode.setOnClickListener {
             job?.cancel()
+            torchOff(cameraManager, cameraId)
         }
 
 
-        window.decorView.post {
+        generateEncode.setOnClickListener {
             job = GlobalScope.launch(Dispatchers.Main){
-                startMorsCode(strToEncode)
+                openFlashLight(textToEncode.text.toString())
             }
         }
+
     }
 
-
-    @RequiresApi(Build.VERSION_CODES.M)
-    fun startMorsCode(word : String) = runBlocking { // this: CoroutineScope
-        launch { openFlashLight(word)}
-    }
 
     @RequiresApi(Build.VERSION_CODES.M)
     suspend fun openFlashLight(phrase: String) {
@@ -58,7 +77,7 @@ class EncodeActivity : AppCompatActivity() {
         var phChars = phrase.toList()
         //char in phrase
         for (morsChar in phChars) {
-            Toast.makeText(this@EncodeActivity, "Letter $morsChar", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivity, "Letter $morsChar", Toast.LENGTH_SHORT).show()
             val morsCharList = CharToMorse.convertCharToMors(morsChar)
             val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
             val cameraId = cameraManager.cameraIdList[0]
@@ -112,4 +131,5 @@ class EncodeActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
+
 }

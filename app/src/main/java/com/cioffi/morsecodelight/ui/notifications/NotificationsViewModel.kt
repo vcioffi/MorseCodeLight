@@ -1,4 +1,4 @@
-package com.cioffi.soslight.ui.notifications
+package com.cioffi.morsecodelight.ui.notifications
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

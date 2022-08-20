@@ -1,4 +1,4 @@
-package com.cioffi.soslight.ui.dashboard
+package com.cioffi.morsecodelight.ui.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.cioffi.soslight.databinding.FragmentDashboardBinding
+import com.cioffi.morsecodelight.databinding.FragmentDashboardBinding
 
 class DashboardFragment : Fragment() {
 

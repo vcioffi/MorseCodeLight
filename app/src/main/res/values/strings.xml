@@ -7,4 +7,5 @@
     <string name="start_mors_code">Start Mors Code</string>
     <string name="stop_encode">Stop encode</string>
     <string name="encode_activity">Encode Mors</string>
+    <string name="stop">Stop encode</string>
 </resources>

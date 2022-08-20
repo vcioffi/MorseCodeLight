@@ -1,4 +1,4 @@
-package com.cioffi.soslight.helpers
+package com.cioffi.morsecodelight.helpers
 
 class CharToMorse {
 

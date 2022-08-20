@@ -1,4 +1,4 @@
-package com.cioffi.soslight
+package com.cioffi.morsecodelight
 
 import org.junit.Test
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.cioffi.soslight">
+    package="com.cioffi.morsecodelight">
 
     <application
         android:allowBackup="true"
@@ -14,12 +14,12 @@
         android:theme="@style/Theme.MorseCodeLight"
         tools:targetApi="31">
         <activity
-            android:name=".EncodeActivity"
+            android:name="com.cioffi.morsecodelight.EncodeActivity"
             android:exported="true"
             android:label="@string/encode_activity">
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.cioffi.morsecodelight.MainActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>
