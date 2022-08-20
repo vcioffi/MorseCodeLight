@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     var flashLightStatus: Boolean = false
     var stopNow : Boolean = false
-    var job: Job? = null
+    var encodeJob: Job? = null
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+                R.id.navigation_home, R.id.navigation_dashboard
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -57,13 +57,13 @@ class MainActivity : AppCompatActivity() {
         val stopEncode: Button = findViewById(R.id.stopEncod)
 
         stopEncode.setOnClickListener {
-            job?.cancel()
+            encodeJob?.cancel()
             torchOff(cameraManager, cameraId)
         }
 
 
         generateEncode.setOnClickListener {
-            job = GlobalScope.launch(Dispatchers.Main){
+            encodeJob = GlobalScope.launch(Dispatchers.Main){
                 openFlashLight(textToEncode.text.toString())
             }
         }
@@ -77,8 +77,18 @@ class MainActivity : AppCompatActivity() {
         var phChars = phrase.toList()
         //char in phrase
         for (morsChar in phChars) {
-            Toast.makeText(this@MainActivity, "Letter $morsChar", Toast.LENGTH_SHORT).show()
-            val morsCharList = CharToMorse.convertCharToMors(morsChar)
+
+            var morsCharList = ""
+            try {
+                morsCharList = CharToMorse.convertCharToMors(morsChar).toString()
+            }catch (illE : IllegalArgumentException ){
+                Toast.makeText(this@MainActivity, "${illE.message}", Toast.LENGTH_LONG).show()
+                encodeJob?.cancel()
+                return
+                
+            }
+            Toast.makeText(this@MainActivity, "Letter $morsChar", Toast.LENGTH_LONG).show()
+            
             val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
             val cameraId = cameraManager.cameraIdList[0]
 

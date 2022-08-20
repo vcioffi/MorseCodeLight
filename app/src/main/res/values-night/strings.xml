@@ -9,4 +9,5 @@
     <string name="stop_encode">Stop encode</string>
     <string name="stop">Stop</string>
     <string name="encode_activity">Encode Mors</string>
+    <string name="title_morsetab">Morse Tab</string>
 </resources>
