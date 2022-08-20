@@ -63,8 +63,10 @@ class MainActivity : AppCompatActivity() {
 
 
         generateEncode.setOnClickListener {
-            encodeJob = GlobalScope.launch(Dispatchers.Main){
-                openFlashLight(textToEncode.text.toString())
+            if(encodeJob ==  null ) {
+                encodeJob = GlobalScope.launch(Dispatchers.Main) {
+                    openFlashLight(textToEncode.text.toString())
+                }
             }
         }
 

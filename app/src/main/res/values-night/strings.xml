@@ -10,4 +10,7 @@
     <string name="stop">Stop</string>
     <string name="encode_activity">Encode Mors</string>
     <string name="title_morsetab">Morse Tab</string>
+    <string name="scrolView1">scrolView1</string>
+    <string name="txt_char">Char</string>
+    <string name="txt_morse_cose">Morse Code</string>
 </resources>
