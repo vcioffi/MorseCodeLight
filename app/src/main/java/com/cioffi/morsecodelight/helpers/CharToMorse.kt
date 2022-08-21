@@ -66,6 +66,22 @@ class CharToMorse {
             return morsCode
         }
 
+        fun convertPhraseToMors(s: String): String {
+            var finalString = ""
+            var charStringArray =  s.toCharArray()
+            val mapCodeMors = MapCodeMors.map
+            for (mrChr in charStringArray){
+                if(mapCodeMors.containsKey(mrChr.lowercaseChar())){
+                    finalString += mapCodeMors.get(mrChr.lowercaseChar()).toString() + "  "
+                }else{
+                    throw IllegalArgumentException("Not all characters are valid")
+                    break
+                }
+
+            }
+            return finalString
+        }
+
     }
 
 

@@ -1,21 +1,16 @@
 package com.cioffi.morsecodelight.ui.dashboard
 
-import android.R
-import android.graphics.Color
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.Shape
 import android.os.Bundle
-import android.view.Gravity
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TableLayout
-import android.widget.TableRow
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.cioffi.morsecodelight.databinding.FragmentDashboardBinding
 import com.cioffi.morsecodelight.helpers.CharToMorse
+import com.cioffi.morsecodelight.helpers.MorsTableGridAdapter
 
 
 class DashboardFragment : Fragment() {
@@ -37,53 +32,41 @@ class DashboardFragment : Fragment() {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        initMorsTab();
+        val griView =  binding.gridViewMorsTable        // Get an instance of base adapter
+        val adapter = MorsTableGridAdapter()
+        val startTranslate: Button = binding.btnTranslateToMors
+        val textTranslated: TextView = binding.txtTranslatedText
+        textTranslated.setMovementMethod(ScrollingMovementMethod())
+
+        startTranslate.setOnClickListener {
+            var textToEncode: EditText = binding.editTextTextPhraseToMors
+            val phraseToTra = textToEncode.text.toString()
+            try {
+                textTranslated.setText(CharToMorse.convertPhraseToMors(phraseToTra))
+            }catch (illE : IllegalArgumentException ){
+                Toast.makeText(context, "${illE.message}", Toast.LENGTH_LONG).show()
+            }
+            textTranslated.setMovementMethod(ScrollingMovementMethod())
+        }
+
+
+
+        // Set the grid view adapter
+        griView.adapter = adapter
+
+        // Configure the grid view
+        griView.numColumns = 1
+        griView.horizontalSpacing = 15
+        griView.verticalSpacing = 15
+        griView.stretchMode = GridView.STRETCH_COLUMN_WIDTH
+
 
         return root
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-
-    fun initMorsTab() {
-        val stk: TableLayout = binding.tableMors
-        val tbrow0 = TableRow(this.context)
-
-        val tv0 = TextView(this.context)
-        tv0.text = getString(com.cioffi.morsecodelight.R.string.txt_char)
-        tv0.setTextColor(Color.WHITE)
-
-        tbrow0.addView(tv0)
-
-        val tv1 = TextView(this.context)
-        tv1.text = getString(com.cioffi.morsecodelight.R.string.txt_morse_cose)
-        tv1.setTextColor(Color.WHITE)
-        tbrow0.addView(tv1)
-
-        stk.addView(tbrow0);
-
-         var mapTabCodes = CharToMorse.getMapMorsCode()
-
-        mapTabCodes.forEach { (key, value) ->
-            print("$key : $value")
-            val tbrow = TableRow(this.context)
-            val tv0 = TextView(this.context)
-            tv0.text = "$key"
-            tv0.setTextColor(Color.WHITE)
-            tv0.gravity = Gravity.CENTER
-            tbrow.addView(tv0)
-
-            val tv1 = TextView(this.context)
-            tv1.text = "$value"
-            tv1.setTextColor(Color.WHITE)
-            tv1.gravity = Gravity.CENTER
-            tbrow.addView(tv1)
-
-            stk.addView(tbrow)
-        }
-    }
-
 }

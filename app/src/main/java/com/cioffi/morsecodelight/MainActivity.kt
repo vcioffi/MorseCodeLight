@@ -59,11 +59,12 @@ class MainActivity : AppCompatActivity() {
         stopEncode.setOnClickListener {
             encodeJob?.cancel()
             torchOff(cameraManager, cameraId)
+            Toast.makeText(this@MainActivity, getString(R.string.txt_mors_sig_interrupted), Toast.LENGTH_LONG).show()
         }
 
 
         generateEncode.setOnClickListener {
-            if(encodeJob ==  null ) {
+            if(encodeJob ==  null || encodeJob!!.isCancelled) {
                 encodeJob = GlobalScope.launch(Dispatchers.Main) {
                     openFlashLight(textToEncode.text.toString())
                 }
