@@ -113,13 +113,13 @@ class MainActivity : AppCompatActivity() {
                     }
                     // slash case The pause between complete words is 7 seconds with the light off.
                     '/' -> {
-                        delay(6000)
+                        delay(3000)
                     }
                 }
-                delay(1000)
+                delay(500)
             }
             //wait 3 sec from on char to another
-            delay(3000)
+            delay(1500)
         }
     }
 
