@@ -4,14 +4,24 @@ plugins {
 }
 
 android {
+
+    signingConfigs {
+        release_CV {
+            storeFile file('./upload-key-store.jks')
+            storePassword 'MorseCodelight'
+            keyAlias 'upload'
+            keyPassword 'MorseCodelight'
+        }
+    }
+
     compileSdk 33
 
     defaultConfig {
         applicationId "com.cioffi.morsecodelight"
         minSdk 21
         targetSdk 33
-        versionCode 3
-        versionName "2.1"
+        versionCode 4
+        versionName "2.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -22,6 +32,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             applicationIdSuffix 'MorseCodeLight'
             versionNameSuffix 'v'
+            signingConfig signingConfigs.release_CV
         }
     }
     compileOptions {
